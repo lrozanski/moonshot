@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 29677121952759869}
   m_Layer: 0
   m_Name: Target Moon
-  m_TagString: Untagged
+  m_TagString: Target Moon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

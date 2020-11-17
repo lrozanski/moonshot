@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5153907730286895263}
   m_Layer: 0
   m_Name: Controllable Moon
-  m_TagString: Untagged
+  m_TagString: Controllable Moon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,7 +103,7 @@ Rigidbody2D:
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 2
   m_CollisionDetection: 0
   m_Constraints: 0
 --- !u!58 &7209235054469471295
