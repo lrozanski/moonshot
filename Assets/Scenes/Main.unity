@@ -444,6 +444,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Target Moon
       objectReference: {fileID: 0}
+    - target: {fileID: 29677121952759868, guid: 5b3f143f27f99e44c9e1b88544a48756, type: 3}
+      propertyPath: m_BodyType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 29677121952759870, guid: 5b3f143f27f99e44c9e1b88544a48756, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -499,6 +503,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 107006402, guid: ab09e6f32a05542408f37d3928614fc5, type: 3}
       propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 107006404, guid: ab09e6f32a05542408f37d3928614fc5, type: 3}
+      propertyPath: gravity
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 107006405, guid: ab09e6f32a05542408f37d3928614fc5, type: 3}
@@ -876,7 +884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1725949104, guid: 9cfefbe2d42c9b74f9ca778a153794d8, type: 3}
       propertyPath: gravity
-      value: 1.2
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 6362903991944186979, guid: 9cfefbe2d42c9b74f9ca778a153794d8, type: 3}
       propertyPath: m_Name

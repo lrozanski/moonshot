@@ -24,6 +24,7 @@ public class ControllableMoon : MonoBehaviour {
 
     private void OnMouseUp() {
         if (_selected) {
+            _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
             forceLine.enabled = false;
             _rigidbody2D.AddForce(_aimVector, ForceMode2D.Impulse);
         }
@@ -50,5 +51,12 @@ public class ControllableMoon : MonoBehaviour {
             position - vectorToPlanet
         });
         forceLine.endWidth = vectorToPlanet.magnitude * 0.2f;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (_rigidbody2D.bodyType == RigidbodyType2D.Kinematic) {
+            _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+            _rigidbody2D.AddForce(other.relativeVelocity / 2f, ForceMode2D.Impulse);
+        }
     }
 }
