@@ -7,17 +7,32 @@ public class ControllableMoon : MonoBehaviour {
     private LineRenderer forceLine;
 
     [SerializeField]
-    private float maxLength;
+    private float forceMultiplier = 1f;
 
+    [SerializeField]
+    private float maxLength = 2;
+
+    [field: SerializeField]
+    public float PositionDelta { get; private set; }
+
+    [field: SerializeField]
+    public float DistanceTraveled { get; private set; }
+    
     private bool _selected;
     private Vector2 _aimVector;
     private Rigidbody2D _rigidbody2D;
+    private Vector2 _startPosition;
+    private Vector2 _previousPosition;
 
     private void Start() {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _startPosition = transform.position;
     }
 
     private void OnMouseDown() {
+        if (!GameManager.Instance.CanShoot || _rigidbody2D.bodyType != RigidbodyType2D.Kinematic) {
+            return;
+        }
         _selected = true;
         forceLine.enabled = true;
     }
@@ -26,7 +41,7 @@ public class ControllableMoon : MonoBehaviour {
         if (_selected) {
             _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
             forceLine.enabled = false;
-            _rigidbody2D.AddForce(_aimVector, ForceMode2D.Impulse);
+            _rigidbody2D.AddForce(_aimVector * forceMultiplier, ForceMode2D.Impulse);
         }
         _selected = false;
     }
@@ -54,9 +69,47 @@ public class ControllableMoon : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        if (_rigidbody2D.bodyType == RigidbodyType2D.Kinematic) {
-            _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
-            _rigidbody2D.AddForce(other.relativeVelocity / 2f, ForceMode2D.Impulse);
+        if (_rigidbody2D.bodyType != RigidbodyType2D.Kinematic) {
+            return;
+        }
+        _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+        _rigidbody2D.AddForce(other.relativeVelocity / 2f, ForceMode2D.Impulse);
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+        if (!other.CompareTag("MainCamera")) {
+            return;
+        }
+        Reset();
+    }
+
+    private void Reset() {
+        _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.Sleep();
+
+        transform.position = _startPosition;
+        Physics2D.SyncTransforms();
+
+        DistanceTraveled = 0f;
+    }
+
+    private void FixedUpdate() {
+        var position = transform.position;
+
+        PositionDelta = Vector2.Distance(position, _previousPosition);
+        DistanceTraveled += PositionDelta;
+        _previousPosition = position;
+    }
+
+    private void LateUpdate() {
+        if (DistanceTraveled > 0f && PositionDelta < 0.001f) {
+            _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+            _rigidbody2D.velocity = Vector2.zero;
+            Physics2D.SyncTransforms();
+
+            _startPosition = _previousPosition;
+            DistanceTraveled = 0f;
         }
     }
 }
