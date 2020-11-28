@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour {
 
     public bool CanShoot { get; private set; }
 
+    [SerializeField]
+    private Moon targetMoon;
+
     private List<Rigidbody2D> _controllableMoons;
 
     private void Start() {
@@ -17,6 +20,14 @@ public class GameManager : MonoBehaviour {
         _controllableMoons = GameObject.FindGameObjectsWithTag("Controllable Moon")
             .Select(moon => moon.GetComponent<Rigidbody2D>())
             .ToList();
+    }
+
+    private void OnEnable() {
+        targetMoon.onControllableMoonAbsorbed += RemoveMoon;
+    }
+
+    private void OnDisable() {
+        targetMoon.onControllableMoonAbsorbed -= RemoveMoon;
     }
 
     private void Update() {
@@ -33,7 +44,11 @@ public class GameManager : MonoBehaviour {
     public void EndTurn() {
         CanShoot = true;
         Shots++;
-        
+
         Debug.Log("End turn");
+    }
+
+    private void RemoveMoon(Rigidbody2D moonRigidBody2D) {
+        _controllableMoons.Remove(moonRigidBody2D);
     }
 }
