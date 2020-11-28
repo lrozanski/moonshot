@@ -27,6 +27,8 @@ public class ControllableMoon : MonoBehaviour {
     private void Start() {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _startPosition = transform.position;
+
+        forceLine = GameObject.Find("Force Line").GetComponent<LineRenderer>();
     }
 
     private void OnMouseDown() {

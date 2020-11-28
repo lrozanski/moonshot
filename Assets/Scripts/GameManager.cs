@@ -2,13 +2,17 @@
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
+
+    private const string TotalShots = "TotalShots";
+    private const string PreviousTotalShots = "PreviousTotalShots";
 
     public static GameManager Instance { get; private set; }
 
     public int Shots { get; private set; }
-    
+
     public bool CanShoot { get; private set; }
 
     [SerializeField]
@@ -35,6 +39,14 @@ public class GameManager : MonoBehaviour {
 
         parText.text = $"Par: {par}";
         CanShoot = true;
+
+        if (SceneManager.GetActiveScene().buildIndex == 0) {
+            var prevShots = PlayerPrefs.GetInt(TotalShots, 0);
+            if (prevShots > 0) {
+                PlayerPrefs.SetInt(PreviousTotalShots, prevShots);
+            }
+            PlayerPrefs.SetInt(TotalShots, 0);
+        }
     }
 
     private void OnEnable() {
@@ -68,7 +80,6 @@ public class GameManager : MonoBehaviour {
         Shots++;
 
         shotsText.text = $"Shots: {Shots}";
-        Debug.Log($"End turn. Shots: {Shots}");
     }
 
     private void RemoveMoon(Rigidbody2D moonRigidBody2D) {
