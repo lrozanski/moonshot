@@ -17,7 +17,7 @@ public class ControllableMoon : MonoBehaviour {
 
     [field: SerializeField]
     public float DistanceTraveled { get; private set; }
-    
+
     private bool _selected;
     private Vector2 _aimVector;
     private Rigidbody2D _rigidbody2D;
@@ -42,6 +42,8 @@ public class ControllableMoon : MonoBehaviour {
             _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
             forceLine.enabled = false;
             _rigidbody2D.AddForce(_aimVector * forceMultiplier, ForceMode2D.Impulse);
+
+            GameManager.Instance.StartLevel();
         }
         _selected = false;
     }
@@ -103,13 +105,15 @@ public class ControllableMoon : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        if (DistanceTraveled > 0f && PositionDelta < 0.001f) {
-            _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
-            _rigidbody2D.velocity = Vector2.zero;
-            Physics2D.SyncTransforms();
-
-            _startPosition = _previousPosition;
-            DistanceTraveled = 0f;
+        if (!(DistanceTraveled > 0f) || !(PositionDelta < 0.002f)) {
+            return;
         }
+        _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.angularVelocity = 0f;
+        Physics2D.SyncTransforms();
+
+        _startPosition = _previousPosition;
+        DistanceTraveled = 0f;
     }
 }
