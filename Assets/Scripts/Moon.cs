@@ -22,9 +22,18 @@ public class Moon : MonoBehaviour {
     [SerializeField]
     private TextMeshProUGUI totalShotsText;
 
-    private void Start() {
-        var controllableMoons = GameObject.FindGameObjectsWithTag("Controllable Moon").Length;
+    [SerializeField]
+    private TextMeshProUGUI targetText;
 
+    [SerializeField]
+    private float textDistance;
+
+    private CircleCollider2D _circleCollider2D;
+
+    private void Start() {
+        _circleCollider2D = GetComponent<CircleCollider2D>();
+
+        var controllableMoons = GameObject.FindGameObjectsWithTag("Controllable Moon").Length;
         scalePerMoon = maxScaleIncrease / controllableMoons;
     }
 
@@ -55,5 +64,14 @@ public class Moon : MonoBehaviour {
 
     private void NextLevel() {
         LevelManager.NextLevel();
+    }
+
+    private void Update() {
+        var position = transform.position;
+        targetText.transform.position = new Vector3(
+            position.x,
+            position.y - _circleCollider2D.radius * transform.localScale.y - textDistance,
+            position.z
+        );
     }
 }
