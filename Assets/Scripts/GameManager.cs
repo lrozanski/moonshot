@@ -3,6 +3,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour {
 
@@ -27,6 +28,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private TextMeshProUGUI parText;
 
+    [SerializeField]
+    private TextMeshProUGUI fastForwardText;
+
+    [SerializeField]
+    private float fastForwardSpeed = 5f;
+    
     private List<Rigidbody2D> _controllableMoons;
 
     private bool _started;
@@ -64,6 +71,17 @@ public class GameManager : MonoBehaviour {
         var moving = _controllableMoons.Any(moon => moon != null && moon.bodyType != RigidbodyType2D.Kinematic);
         if (moving) {
             CanShoot = false;
+
+            if (Input.GetMouseButton((int) MouseButton.LeftMouse)) {
+                fastForwardText.gameObject.SetActive(true);
+                Time.timeScale = fastForwardSpeed;
+            } else {
+                fastForwardText.gameObject.SetActive(false);
+                Time.timeScale = 1f;
+            }
+        } else {
+            fastForwardText.gameObject.SetActive(false);
+            Time.timeScale = 1f;
         }
 
         if (!CanShoot && !moving) {
